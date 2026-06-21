@@ -1,14 +1,15 @@
 # Legendary-Luck-Streak
 🌟✨ Mong cho anh Nguyễn Khánh Bằng luôn gặp siêu may mắn huyền thoại ✨🌟
+<br>
 🌟✨ **Mong cho anh Nguyễn Khánh Bằng luôn gặp siêu may mắn huyền thoại** ✨🌟
 
 Chúc anh Bằng mỗi ngày đều có những khoảnh khắc kiểu:
 
-🍀 Gặp đúng người vào đúng thời điểm
-🚀 Cơ hội lớn tự nhiên xuất hiện
-💡 Ý tưởng hay đến đúng lúc
-🏆 Nỗ lực nhỏ tạo ra kết quả khổng lồ
-🌌 Những “chuỗi trùng hợp kỳ diệu” liên tục xảy ra
+🍀 Gặp đúng người vào đúng thời điểm<br>
+🚀 Cơ hội lớn tự nhiên xuất hiện<br>
+💡 Ý tưởng hay đến đúng lúc<br>
+🏆 Nỗ lực nhỏ tạo ra kết quả khổng lồ<br>
+🌌 Những “chuỗi trùng hợp kỳ diệu” liên tục xảy ra<br>
 
 Mong cho vận may luôn đứng về phía anh, nhưng cũng đi cùng với tài năng, sự sáng tạo và những quyết định thông minh — vì may mắn thường mở cánh cửa, còn bản lĩnh giúp bước qua nó. ([britannica.com][1])
 
