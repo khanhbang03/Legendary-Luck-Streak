@@ -1,0 +1,546 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body { background: transparent; overflow-x: hidden; }
+
+  #universe {
+    width: 100%;
+    min-height: 900px;
+    background: linear-gradient(135deg, #0a0015 0%, #0d0030 30%, #050020 60%, #000010 100%);
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    font-family: var(--font-sans);
+  }
+
+  canvas#stars {
+    position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;
+  }
+
+  .glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  #orb1 { width: 400px; height: 400px; background: #7c3aed; top: -100px; left: -100px; animation: drift1 12s ease-in-out infinite; }
+  #orb2 { width: 350px; height: 350px; background: #f59e0b; top: 200px; right: -80px; animation: drift2 15s ease-in-out infinite; }
+  #orb3 { width: 300px; height: 300px; background: #10b981; bottom: -50px; left: 30%; animation: drift3 18s ease-in-out infinite; }
+
+  @keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,60px)} }
+  @keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-50px,40px)} }
+  @keyframes drift3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-40px)} }
+
+  .content {
+    position: relative;
+    z-index: 10;
+    padding: 48px 32px 56px;
+    text-align: center;
+  }
+
+  .crown {
+    font-size: 56px;
+    display: block;
+    margin-bottom: 8px;
+    animation: crown-bounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px #f59e0b);
+  }
+
+  @keyframes crown-bounce {
+    0%,100%{transform:translateY(0) scale(1)} 
+    50%{transform:translateY(-10px) scale(1.05)}
+  }
+
+  .main-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 0 40px rgba(245,158,11,0.8), 0 0 80px rgba(124,58,237,0.5);
+    margin-bottom: 6px;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 900;
+    background: linear-gradient(90deg, #f59e0b, #fbbf24, #a78bfa, #818cf8, #34d399, #f59e0b);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s linear infinite;
+    margin-bottom: 4px;
+  }
+
+  @keyframes shimmer { 0%{background-position:0%} 100%{background-position:300%} }
+
+  .legendary-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(245,158,11,0.12);
+    border: 1px solid rgba(245,158,11,0.4);
+    border-radius: 100px;
+    padding: 6px 20px;
+    font-size: 12px;
+    color: #fbbf24;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin: 16px 0 32px;
+  }
+
+  .luck-meter {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 32px;
+    backdrop-filter: blur(10px);
+  }
+
+  .meter-label {
+    color: rgba(255,255,255,0.5);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .meter-bar-wrapper {
+    background: rgba(255,255,255,0.07);
+    border-radius: 100px;
+    height: 12px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .meter-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, #7c3aed, #f59e0b, #34d399);
+    background-size: 200% auto;
+    animation: fill-anim 2.5s ease-out forwards, meter-glow 3s ease-in-out infinite 2.5s;
+    width: 0;
+  }
+
+  @keyframes fill-anim {
+    0% { width: 0%; opacity: 0.5; }
+    100% { width: 100%; opacity: 1; }
+  }
+  @keyframes meter-glow {
+    0%,100%{ background-position: 0% } 
+    50%{ background-position: 200% }
+  }
+
+  .meter-value {
+    color: #fbbf24;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: right;
+  }
+
+  .blessing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .blessing-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 18px 16px;
+    text-align: left;
+    transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .blessing-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: inherit;
+  }
+
+  .blessing-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(245,158,11,0.35);
+    background: rgba(255,255,255,0.07);
+  }
+
+  .blessing-card:hover::before { opacity: 1; }
+
+  .card-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+  .card-title { color: #fff; font-size: 13px; font-weight: 500; margin-bottom: 4px; line-height: 1.3; }
+  .card-desc { color: rgba(255,255,255,0.45); font-size: 11px; line-height: 1.5; }
+
+  .grand-quote {
+    background: rgba(245,158,11,0.07);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 16px;
+    padding: 28px 28px;
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .grand-quote::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 24px;
+    font-size: 72px;
+    color: rgba(245,158,11,0.3);
+    line-height: 1;
+    font-family: Georgia, serif;
+  }
+
+  .grand-quote p {
+    color: rgba(255,255,255,0.85);
+    font-size: 14px;
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  .grand-quote .quote-credit {
+    color: #f59e0b;
+    font-size: 12px;
+    margin-top: 12px;
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  .streak-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .streak-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 72px;
+    font-weight: 900;
+    color: #f59e0b;
+    text-shadow: 0 0 40px rgba(245,158,11,0.6);
+    line-height: 1;
+    animation: pulse-num 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-num {
+    0%,100%{text-shadow:0 0 40px rgba(245,158,11,0.6), 0 0 0px #f59e0b}
+    50%{text-shadow:0 0 60px rgba(245,158,11,0.9), 0 0 100px rgba(245,158,11,0.3)}
+  }
+
+  .streak-info { text-align: left; }
+  .streak-label { color: rgba(255,255,255,0.4); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
+  .streak-text { color: #fff; font-size: 16px; font-weight: 500; }
+
+  .particles-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .luck-chip {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 100px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    animation: chip-float var(--d, 4s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+
+  @keyframes chip-float {
+    0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)}
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, rgba(124,58,237,0.6), rgba(245,158,11,0.6));
+    border: 1px solid rgba(245,158,11,0.4);
+    border-radius: 100px;
+    padding: 12px 32px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 16px;
+  }
+
+  .cta-btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 40px rgba(245,158,11,0.3);
+  }
+
+  .footer-luck {
+    color: rgba(255,255,255,0.25);
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(245,158,11,0.3), transparent);
+    margin: 28px 0;
+  }
+
+  .floating-emoji {
+    position: absolute;
+    font-size: 24px;
+    pointer-events: none;
+    z-index: 5;
+    animation: float-up linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes float-up {
+    0%  { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.6; }
+    100%{ transform: translateY(-700px) rotate(360deg); opacity: 0; }
+  }
+
+  #confetti-canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%; z-index: 6; pointer-events: none;
+  }
+</style>
+
+<div id="universe">
+  <canvas id="stars"></canvas>
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="glow-orb" id="orb1"></div>
+  <div class="glow-orb" id="orb2"></div>
+  <div class="glow-orb" id="orb3"></div>
+
+  <div class="content">
+    <span class="crown">👑</span>
+    <div class="main-title">Legendary Luck Streak</div>
+    <div class="subtitle-name">Nguyễn Khánh Bằng</div>
+    <div class="legendary-badge">✦ Huyền Thoại Cấp Tối Thượng ✦</div>
+
+    <div class="luck-meter">
+      <div class="meter-label">Chỉ số may mắn hiện tại</div>
+      <div class="meter-bar-wrapper">
+        <div class="meter-fill" id="meterFill"></div>
+      </div>
+      <div class="meter-value" id="meterVal">0%</div>
+    </div>
+
+    <div class="streak-counter">
+      <div class="streak-num" id="streakNum">∞</div>
+      <div class="streak-info">
+        <div class="streak-label">Chuỗi may mắn liên tiếp</div>
+        <div class="streak-text">Không có điểm kết thúc 🍀</div>
+      </div>
+    </div>
+
+    <div class="particles-row">
+      <div class="luck-chip" style="--d:3.5s;--delay:0s">🌟 Gặp đúng người</div>
+      <div class="luck-chip" style="--d:4s;--delay:0.3s">🚀 Cơ hội xuất hiện</div>
+      <div class="luck-chip" style="--d:4.5s;--delay:0.6s">💡 Ý tưởng đúng lúc</div>
+      <div class="luck-chip" style="--d:3.8s;--delay:0.9s">🏆 Kết quả khổng lồ</div>
+      <div class="luck-chip" style="--d:5s;--delay:1.2s">🌌 Trùng hợp kỳ diệu</div>
+    </div>
+
+    <div class="blessing-grid">
+      <div class="blessing-card">
+        <span class="card-icon">🍀</span>
+        <div class="card-title">Gặp đúng người, đúng thời điểm</div>
+        <div class="card-desc">Mọi cuộc gặp gỡ đều trở thành cơ duyên quý giá</div>
+      </div>
+      <div class="blessing-card">
+        <span class="card-icon">🚀</span>
+        <div class="card-title">Cơ hội tự nhiên xuất hiện</div>
+        <div class="card-desc">Cánh cửa lớn luôn mở ra đúng lúc anh cần nhất</div>
+      </div>
+      <div class="blessing-card">
+        <span class="card-icon">💡</span>
+        <div class="card-title">Ý tưởng đến đúng lúc</div>
+        <div class="card-desc">Cảm hứng ập đến bất cứ khi nào anh cần sáng tạo</div>
+      </div>
+      <div class="blessing-card">
+        <span class="card-icon">🏆</span>
+        <div class="card-title">Nỗ lực nhỏ, kết quả khổng lồ</div>
+        <div class="card-desc">Leverage tối đa — mọi bước đi đều nhân lên 10x</div>
+      </div>
+      <div class="blessing-card">
+        <span class="card-icon">🌌</span>
+        <div class="card-title">Chuỗi trùng hợp kỳ diệu</div>
+        <div class="card-desc">Vũ trụ liên tục gửi những dấu hiệu tuyệt vời</div>
+      </div>
+      <div class="blessing-card">
+        <span class="card-icon">✨</span>
+        <div class="card-title">Bản lĩnh nhân may mắn</div>
+        <div class="card-desc">Tài năng + sáng tạo + quyết định thông minh</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="grand-quote">
+      <p>May mắn thường mở cánh cửa, còn bản lĩnh giúp bước qua nó. Anh Nguyễn Khánh Bằng sở hữu cả hai — nên mỗi cánh cửa mở ra đều là khởi đầu của một câu chuyện huyền thoại.</p>
+      <div class="quote-credit">— Legendary Luck Streak System™</div>
+    </div>
+
+    <button class="cta-btn" id="activateBtn" onclick="activateLuck()">
+      ⚡ Kích hoạt thêm may mắn
+    </button>
+
+    <div class="divider"></div>
+
+    <div class="footer-luck">
+      LEGENDARY LUCK STREAK · NGUYỄN KHÁNH BẰNG · ∞ KHÔNG HỒI KẾT ∞
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  const universe = document.getElementById('universe');
+
+  function resizeCanvas() {
+    canvas.width = universe.offsetWidth;
+    canvas.height = universe.offsetHeight;
+  }
+  resizeCanvas();
+
+  const stars = Array.from({length: 200}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 1.5 + 0.3,
+    speed: Math.random() * 0.3 + 0.05,
+    alpha: Math.random(),
+    dAlpha: (Math.random() * 0.02 + 0.005) * (Math.random() < 0.5 ? 1 : -1)
+  }));
+
+  function animStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      s.alpha += s.dAlpha;
+      if (s.alpha > 1 || s.alpha < 0) s.dAlpha *= -1;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${Math.max(0,s.alpha)})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(animStars);
+  }
+  animStars();
+
+  let pct = 0;
+  const meterFill = document.getElementById('meterFill');
+  const meterVal = document.getElementById('meterVal');
+  const interval = setInterval(() => {
+    pct = Math.min(pct + 1, 100);
+    meterVal.textContent = pct + '%';
+    if (pct >= 100) {
+      meterVal.textContent = '∞ LEGENDARY';
+      meterVal.style.color = '#a78bfa';
+      clearInterval(interval);
+    }
+  }, 22);
+
+  const emojis = ['🍀', '⭐', '✨', '🌟', '💫', '🎯', '🚀', '💎', '🏆', '🎊'];
+  function spawnEmoji() {
+    const el = document.createElement('div');
+    el.className = 'floating-emoji';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = (Math.random() * 90 + 5) + '%';
+    el.style.bottom = '0';
+    el.style.animationDuration = (Math.random() * 4 + 5) + 's';
+    el.style.animationDelay = '0s';
+    universe.appendChild(el);
+    setTimeout(() => el.remove(), 9000);
+  }
+  setInterval(spawnEmoji, 1800);
+  spawnEmoji(); spawnEmoji();
+
+  const confCanvas = document.getElementById('confetti-canvas');
+  const cctx = confCanvas.getContext('2d');
+  confCanvas.width = universe.offsetWidth;
+  confCanvas.height = universe.offsetHeight;
+
+  let confettiActive = false;
+  let confettiPieces = [];
+  const colors = ['#f59e0b','#7c3aed','#34d399','#f472b6','#60a5fa','#fbbf24','#a78bfa'];
+
+  function launchConfetti() {
+    confettiActive = true;
+    for (let i = 0; i < 80; i++) {
+      confettiPieces.push({
+        x: confCanvas.width / 2,
+        y: confCanvas.height * 0.4,
+        vx: (Math.random() - 0.5) * 14,
+        vy: -(Math.random() * 10 + 4),
+        rot: Math.random() * 360,
+        rotV: (Math.random() - 0.5) * 8,
+        w: Math.random() * 10 + 6,
+        h: Math.random() * 5 + 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        alpha: 1,
+        gravity: 0.3
+      });
+    }
+    animConfetti();
+    setTimeout(() => { confettiActive = false; }, 3000);
+  }
+
+  function animConfetti() {
+    cctx.clearRect(0, 0, confCanvas.width, confCanvas.height);
+    confettiPieces = confettiPieces.filter(p => p.alpha > 0.05);
+    confettiPieces.forEach(p => {
+      p.x += p.vx;
+      p.vy += p.gravity;
+      p.y += p.vy;
+      p.rot += p.rotV;
+      p.alpha -= 0.008;
+      cctx.save();
+      cctx.translate(p.x, p.y);
+      cctx.rotate(p.rot * Math.PI / 180);
+      cctx.globalAlpha = p.alpha;
+      cctx.fillStyle = p.color;
+      cctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      cctx.restore();
+    });
+    if (confettiPieces.length > 0) requestAnimationFrame(animConfetti);
+    else cctx.clearRect(0, 0, confCanvas.width, confCanvas.height);
+  }
+
+  window.activateLuck = function() {
+    launchConfetti();
+    for (let i = 0; i < 4; i++) {
+      setTimeout(spawnEmoji, i * 200);
+    }
+    const btn = document.getElementById('activateBtn');
+    btn.textContent = '🌟 Đã kích hoạt! May mắn đang bay đến...';
+    setTimeout(() => { btn.innerHTML = '⚡ Kích hoạt thêm may mắn'; }, 3000);
+  };
+})();
+</script>
